@@ -5,7 +5,7 @@ import bs4
 
 title_selector = "#xy_app_content > div.ta-frame > div.ta_panel.ta_panel_group.ta_group > section > section > main > div > div.group-resource-body > div > div.disk_previewer_with_banner > div.common_node_content_banner.flex_panel.hor > h5"
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0"
-url = input("输入文件页链接：")
+url = input("输入小雅链接：")
 
 
 async def main():
@@ -21,6 +21,8 @@ async def main():
     src = await page.evaluate('(element) => unescape(element.getAttribute("src"))', iframe)
     title_element = await page.J(title_selector)
     title = await page.evaluate(f'(element) => element.textContent', title_element)
+    if not title.endswith((".txt", ".pdf", ".doc", ".docx", ".ppt", ".pptx")):
+        title = await page.evaluate(f'(element) => element.title', title_element)
     await browser.close()
     # 打印解码后的src属性
     print('Decoded src:', src)
